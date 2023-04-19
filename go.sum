@@ -1,0 +1,4 @@
+github.com/aws/aws-lambda-go v1.40.0 h1:6dKcDpXsTpapfCFF6Debng6CiV/Z3sNHekM6bwhI2J0=
+github.com/aws/aws-lambda-go v1.40.0/go.mod h1:jwFe2KmMsHmffA1X2R09hH6lFzJQxzI8qK17ewzbQMM=
+github.com/chuxorg/chux-models v1.0.27 h1:ar0nUcJRtoBR+IK/FrIg+nuNc5tTJpwKLrm8ub9BGS8=
+github.com/chuxorg/chux-models v1.0.27/go.mod h1:eEu2sllvrBFFttv+ImkGavv+Lt8kRqueT+UkolcYUYk=
