@@ -27,7 +27,8 @@ type ParseEvent struct {
 }
 
 func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
-	cfg := cfg.LoadConfig()
+
+	cfg := cfg.New()
 	bucket := s3.New(
 		s3.WithConfig(*cfg),
 	)
