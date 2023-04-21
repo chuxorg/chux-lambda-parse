@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	cfg "github.com/chuxorg/chux-lambda-parser/config"
 	"github.com/chuxorg/chux-parser/parsing"
 	"github.com/chuxorg/chux-parser/s3"
 )
@@ -18,7 +17,24 @@ type ParseLambda struct{}
 var parseLambda IParseLambda = &ParseLambda{}
 
 func (l *ParseLambda) Parse(input string) (string, error) {
-	// Your parse implementation goes here
+	bucket := s3.New()
+
+	files, err := bucket.Download()
+	if err != nil {
+		panic(err)
+	}
+
+	parser := parsing.New()
+	for _, f := range files {
+		parser.Parse(f)
+	}
+	filesInterface := make([]interface{}, len(files))
+	for i, file := range files {
+		filesInterface[i] = file
+	}
+
+	file := s3.File{}
+	file.Save(filesInterface)
 	return "", nil
 }
 
@@ -27,21 +43,8 @@ type ParseEvent struct {
 }
 
 func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
-
-	cfg := cfg.New()
-	bucket := s3.New(
-		s3.WithConfig(*cfg),
-	)
-
-	files, err := bucket.Download()
-	if err != nil {
-		panic(err)
-	}
-
-	parser := parsing.New(parsing.WithConfig(*cfg))
-	for _, f := range files {
-		parser.Parse(f)
-	}
+	pl := ParseLambda{}
+	pl.Parse(event.Input)
 	return parseLambda.Parse(event.Input)
 }
 
