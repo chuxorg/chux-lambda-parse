@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/aws/aws-lambda-go v1.40.0
 	github.com/chuxorg/chux-models v1.2.38
-	github.com/chuxorg/chux-parser v1.0.10
+	github.com/chuxorg/chux-parser v1.0.11
 	github.com/spf13/viper v1.15.0
 )
 

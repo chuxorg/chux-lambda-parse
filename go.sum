@@ -49,6 +49,8 @@ github.com/chuxorg/chux-models v1.2.38 h1:xiPD73ClMwQRWdpAtI+e1gLENcU4qMGx7+AyqR
 github.com/chuxorg/chux-models v1.2.38/go.mod h1:KhFX1fHdcaxob+87CJSjmukY430e+h3H8V6YJJdpJts=
 github.com/chuxorg/chux-parser v1.0.10 h1:mdhyDJS8twnaV+Wf8LOa3Cye3RRxDJ5rvQpZ2CSKyUI=
 github.com/chuxorg/chux-parser v1.0.10/go.mod h1:7Zb4w0uauloT3ehT4fBQM8K2I6DgAaG0R+8yxrygbvU=
+github.com/chuxorg/chux-parser v1.0.11 h1:PIyN1e/LuRllgsQo3N3Rqt6vgMlhZ3aw2Yj0l7WVWng=
+github.com/chuxorg/chux-parser v1.0.11/go.mod h1:7Zb4w0uauloT3ehT4fBQM8K2I6DgAaG0R+8yxrygbvU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
