@@ -57,7 +57,7 @@ resource "aws_lambda_function" "chux_lambda_parse" {
   runtime       = "go1.x"
   role          = aws_iam_role.lambda_role.arn
 
-  filename = "deployment_package.zip" # Make sure to create the deployment package
+  filename = "chux-lambda-parser.zip" # Make sure to create the deployment package
 
   vpc_config {
     subnet_ids         = ["subnet-009f7d01c00791a01"]
