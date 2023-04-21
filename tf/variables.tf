@@ -13,7 +13,3 @@ variable "aws_region" {
   type        = string
 }
 
-variable "aws_bucket" {
-  description = "AWS S3 bucket"
-  type        = string
-}
