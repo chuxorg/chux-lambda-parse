@@ -1,8 +1,7 @@
-  push:
-    branches:
-      - main
-  pull_request:
-
+on:
+  release:
+    types:
+      - created
 jobs:
   terraform:
     name: 'Terraform'
@@ -15,14 +14,14 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: '^1.17'
+        go-version: '1.19'
 
     - name: Build Lambda deployment package
       run: |
         cd build
         go build -o chux-lambda-parser
-        zip deployment_package.zip main
-        mv deployment_package.zip ../../tf/
+        zip chux-lambda-parser.zip chux-lambda-parser
+        mv chux-lambda-parser.zip ../../tf/
         cd ../../tf/
 
     - name: Set up Terraform
