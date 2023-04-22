@@ -64,6 +64,21 @@ resource "aws_lambda_function" "chux_lambda_parse" {
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
+  environment {
+    variables = {
+      AWS_BUCKET="chux-crawler"
+      AWS_SOURCE_BUCKET="chux-crawler"
+      LOG_FILE_NAME="chux-cprs"
+      MONGO_URI="mongodb+srv://%s:%s@chux-mongo-cluster.4mvs7.mongodb.net/"
+      MONGO_USER_NAME="username"
+      MONGO_PASSWORD="password"
+      MONGO_DATABASE="chux-cprs"
+      ENVIRONMENT="development"
+      TARGET="Lambda"
+      AWS_SOURCE_BUCKET="chux-crawler"
+    }
+  }
+
 }
 
 resource "aws_iam_role_policy_attachment" "vpc_access_policy" {

@@ -18,8 +18,9 @@ jobs:
 
     - name: Build Lambda deployment package
       run: | 
-        go build -o chux-lambda-parser
-        zip chux-lambda-parser.zip chux-lambda-parser
+        GOOS=linux GOARCH=amd64 go build -o parseHandler main.go
+        chmod +x parseHandler
+        zip chux-lambda-parser.zip parseHandler
         mv chux-lambda-parser.zip tf/
         cd tf/
 
