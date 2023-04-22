@@ -47,21 +47,26 @@ resource "aws_security_group" "lambda_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/8"] # Adjust this to your VPC's CIDR block
+    cidr_blocks = ["10.0.0.0/16"] # VPC's CIDR block
   }
 }
 
 resource "aws_lambda_function" "chux_lambda_parse" {
   function_name = local.function_name
-  handler       = "parseHandler" # Update this to the correct handler in your Go package
+  handler       = "parseHandler" # handler in the Go package
   runtime       = "go1.x"
   role          = aws_iam_role.lambda_role.arn
 
-  filename = "chux-lambda-parser.zip" # Make sure to create the deployment package
+  filename = "chux-lambda-parser.zip" # create the deployment package
 
   vpc_config {
     subnet_ids         = ["subnet-009f7d01c00791a01"]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
+}
+
+resource "aws_iam_role_policy_attachment" "vpc_access_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+  role       = aws_iam_role.lambda_role.id
 }
