@@ -45,8 +45,13 @@ type ParseEvent struct {
 }
 
 func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
+	log.Default().Println("Setting up Parse Lambda")
 	pl := ParseLambda{}
-	pl.Parse(event.Input)
+	s, err := pl.Parse(event.Input)
+	if err != nil {
+		log.Default().Println("parseHandler() - Error parsing: %v", err)
+		return s, err
+	}
 	return parseLambda.Parse(event.Input)
 }
 
@@ -58,5 +63,6 @@ func main() {
 			log.Fatalf("Failed to change working directory: %v", err)
 		}
 	}
+	log.Default().Println("Starting parse lambda")
 	lambda.Start(parseHandler)
 }
