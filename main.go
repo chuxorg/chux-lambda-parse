@@ -49,7 +49,6 @@ func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
 	pl := ParseLambda{}
 	s, err := pl.Parse(event.Input)
 	if err != nil {
-		log.Default().Println("parseHandler() - Error parsing: %v", err)
 		return s, err
 	}
 	return parseLambda.Parse(event.Input)
