@@ -18,11 +18,18 @@ jobs:
 
     - name: Build Lambda deployment package
       run: | 
-        
         GOOS=linux GOARCH=amd64 go build -o parseHandler main.go
         chmod +x parseHandler
-        set -euo pipefail
-        exec /var/task/parseHandler
+        # Create bootstrap file
+        echo '#!/bin/sh' > bootstrap
+        echo 'set -euo pipefail' >> bootstrap
+        echo 'exec /var/task/parseHandler' >> bootstrap
+        chmod +x bootstrap
+
+        # Package the Go binary and bootstrap file
+        zip chux-lambda-parser.zip parseHandler bootstrap
+        mv chux-lambda-parser.zip tf/
+        cd tf/
         chmod +x bootstrap
         zip chux-lambda-parser.zip parseHandler bootstrap
         mv chux-lambda-parser.zip tf/
