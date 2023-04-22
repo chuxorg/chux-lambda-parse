@@ -20,9 +20,7 @@ jobs:
       run: | 
         GOOS=linux GOARCH=amd64 go build -o parseHandler main.go
         chmod +x parseHandler
-        chmod +x bootstrap
-        # Package the Go binary and bootstrap file
-        zip chux-lambda-parser.zip parseHandler bootstrap
+        zip chux-lambda-parser.zip parseHandler
         mv chux-lambda-parser.zip tf/
         cd tf/
         
