@@ -1,3 +1,15 @@
+terraform {
+  backend "s3" {
+    bucket = "chux-terraform-state"
+    key    = "chux-lambda-terraform.tfstate"
+    region = "us-east-1"
+    # if needed ..
+    # access_key = "your_aws_access_key"
+    # secret_key = "your_aws_secret_key"
+  }
+}
+
+
 provider "aws" {
   region = "us-east-1" # Change this to your desired AWS region
 }
