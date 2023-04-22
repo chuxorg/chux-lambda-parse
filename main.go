@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"log"
+	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/chuxorg/chux-parser/parsing"
@@ -49,5 +51,12 @@ func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
 }
 
 func main() {
+	taskRoot := os.Getenv("LAMBDA_TASK_ROOT")
+	if taskRoot != "" {
+		err := os.Chdir(taskRoot)
+		if err != nil {
+			log.Fatalf("Failed to change working directory: %v", err)
+		}
+	}
 	lambda.Start(parseHandler)
 }
