@@ -21,6 +21,7 @@ jobs:
         GOOS=linux GOARCH=amd64 go build -o parseHandler main.go
         chmod +x parseHandler
         # Create bootstrap file
+        touch bootstrap
         echo '#!/bin/sh' > bootstrap
         echo 'set -euo pipefail' >> bootstrap
         echo 'exec /var/task/parseHandler' >> bootstrap
