@@ -45,12 +45,10 @@ github.com/aws/aws-sdk-go v1.44.248/go.mod h1:aVsgQcEevwlmQ7qHE9I3h+dtQgpqhFB+i8
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chuxorg/chux-datastore v1.2.5 h1:1o+nUm1fUvQnhkJB5iIH+O67XyMTr4Ad6H7+IB4lySo=
 github.com/chuxorg/chux-datastore v1.2.5/go.mod h1:BThWIRsai6TsXN5IiieuuFPWVkBLw/J+q5ebAuIEX2Y=
-github.com/chuxorg/chux-models v1.2.38 h1:xiPD73ClMwQRWdpAtI+e1gLENcU4qMGx7+AyqRxZysQ=
-github.com/chuxorg/chux-models v1.2.38/go.mod h1:KhFX1fHdcaxob+87CJSjmukY430e+h3H8V6YJJdpJts=
-github.com/chuxorg/chux-parser v1.0.10 h1:mdhyDJS8twnaV+Wf8LOa3Cye3RRxDJ5rvQpZ2CSKyUI=
-github.com/chuxorg/chux-parser v1.0.10/go.mod h1:7Zb4w0uauloT3ehT4fBQM8K2I6DgAaG0R+8yxrygbvU=
-github.com/chuxorg/chux-parser v1.0.11 h1:PIyN1e/LuRllgsQo3N3Rqt6vgMlhZ3aw2Yj0l7WVWng=
-github.com/chuxorg/chux-parser v1.0.11/go.mod h1:7Zb4w0uauloT3ehT4fBQM8K2I6DgAaG0R+8yxrygbvU=
+github.com/chuxorg/chux-models v1.2.39 h1:Y5sk7v/7o5IxPvgr+sACXNTEmKwK7PaRFzY81JuRot8=
+github.com/chuxorg/chux-models v1.2.39/go.mod h1:KhFX1fHdcaxob+87CJSjmukY430e+h3H8V6YJJdpJts=
+github.com/chuxorg/chux-parser v1.0.12 h1:oDPGeC/dLtvDK/rWMiXBS4UMLLIMFY3P47wCP4WPIqg=
+github.com/chuxorg/chux-parser v1.0.12/go.mod h1:+rsU4vhVCHbc3GG7EM8gMgnXWAusteTz/j+o7n1Oc10=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
