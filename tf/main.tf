@@ -66,7 +66,7 @@ resource "aws_security_group" "lambda_sg" {
 resource "aws_lambda_function" "chux_lambda_parse" {
   function_name = local.function_name
   handler       = "parseHandler" # handler in the Go package
-  runtime       = "go1.x"
+  runtime       = "provided.al2"
   role          = aws_iam_role.lambda_role.arn
 
   filename = "chux-lambda-parser.zip" # create the deployment package
