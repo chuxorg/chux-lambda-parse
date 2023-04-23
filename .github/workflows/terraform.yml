@@ -16,14 +16,22 @@ jobs:
       with:
         go-version: '1.19'
 
-    - name: Build Lambda deployment package
-      run: | 
-        GOOS=linux GOARCH=amd64 go build -o parseHandler main.go
-        chmod +x parseHandler
-        zip chux-lambda-parser.zip parseHandler
-        mv chux-lambda-parser.zip tf/
-        cd tf/
+    - name: Build Docker image
+      run: |
+        docker build -t chux-lambda-parser:latest .
         
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Tag Docker image
+      run: |
+        docker tag chux-lambda-parser:latest ${{ steps.login-ecr.outputs.registry }}/chux-lambda-parser:latest
+
+    - name: Push Docker image to Amazon ECR
+      run: |
+        docker push ${{ steps.login-ecr.outputs.registry }}/chux-lambda-parser:latest        
+    
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
