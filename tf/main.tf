@@ -73,8 +73,8 @@ resource "aws_security_group" "lambda_sg" {
 
 resource "aws_lambda_function" "chux_lambda_parse" {
   function_name = local.function_name
-  handler       = "parseHandler" # handler in the Go package
-  runtime       = "go1.x"
+  # handler       = "parseHandler" # handler in the Go package
+  # runtime       = "go1.x"
   role          = aws_iam_role.lambda_role.arn
 
   image_uri = var.image_uri
