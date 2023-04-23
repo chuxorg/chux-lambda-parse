@@ -71,6 +71,10 @@ resource "aws_lambda_function" "chux_lambda_parse" {
 
   filename = "chux-lambda-parser.zip" # create the deployment package
 
+  image_uri = "${aws_ecr_repository.chux_lambda_parser.repository_url}:latest"
+
+  package_type = "Container"
+
   vpc_config {
     subnet_ids         = ["subnet-009f7d01c00791a01"]
     security_group_ids = [aws_security_group.lambda_sg.id]

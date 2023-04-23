@@ -3,41 +3,46 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/chuxorg/chux-parser/parsing"
 	"github.com/chuxorg/chux-parser/s3"
 )
 
-type IParseLambda interface {
-	Parse(input string) (string, error)
-}
-
 type ParseLambda struct{}
 
-var parseLambda IParseLambda = &ParseLambda{}
+func (l *ParseLambda) Parse(ctx context.Context, input string) (string, error) {
+	
+	log.Println("Entering Parse Lambda")
 
-func (l *ParseLambda) Parse(input string) (string, error) {
 	bucket := s3.New()
 
+	log.Println("Downloading Files.")	
 	files, err := bucket.Download()
 	if err != nil {
-		panic(err)
+		return "", err
 	}
+	log.Println("Files downloaded.")
 
+	log.Println("Parsing Files.")
 	parser := parsing.New()
 	for _, f := range files {
+		
 		parser.Parse(f)
 	}
+	log.Println("Files Parsed.")
+
+	log.Println("Saving Files to Mongo.")
 	filesInterface := make([]interface{}, len(files))
 	for i, file := range files {
 		filesInterface[i] = file
 	}
-
 	file := s3.File{}
 	file.Save(filesInterface)
+	log.Println("Files Saved")
+	
 	return "", nil
+
 }
 
 type ParseEvent struct {
@@ -45,23 +50,18 @@ type ParseEvent struct {
 }
 
 func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
-	log.Default().Println("Setting up Parse Lambda")
+	log.Println("Setting up Parse Lambda")
 	pl := ParseLambda{}
-	s, err := pl.Parse(event.Input)
+	s, err := pl.Parse(ctx, event.Input)
 	if err != nil {
-		return s, err
+		log.Printf("Error in parseHandler: %v", err)
+		return "", err
 	}
-	return parseLambda.Parse(event.Input)
+	return s, nil
 }
 
 func main() {
-	taskRoot := os.Getenv("LAMBDA_TASK_ROOT")
-	if taskRoot != "" {
-		err := os.Chdir(taskRoot)
-		if err != nil {
-			log.Fatalf("Failed to change working directory: %v", err)
-		}
-	}
-	log.Default().Println("Starting parse lambda")
+	
+	log.Println("Starting parse lambda")
 	lambda.Start(parseHandler)
 }
