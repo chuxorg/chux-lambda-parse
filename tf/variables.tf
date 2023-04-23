@@ -13,3 +13,8 @@ variable "aws_region" {
   type        = string
 }
 
+variable "image_uri" {
+  type        = string
+  description = "The ECR image URI for the Lambda function"
+}
+

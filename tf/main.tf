@@ -77,7 +77,7 @@ resource "aws_lambda_function" "chux_lambda_parse" {
   runtime       = "go1.x"
   role          = aws_iam_role.lambda_role.arn
 
-  image_uri = "${aws_ecr_repository.chux_lambda_parser.repository_url}:latest"
+  image_uri = var.image_uri
 
   package_type = "Image"
 
