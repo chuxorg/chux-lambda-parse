@@ -77,8 +77,6 @@ resource "aws_lambda_function" "chux_lambda_parse" {
   runtime       = "go1.x"
   role          = aws_iam_role.lambda_role.arn
 
-  filename = "chux-lambda-parser.zip" # create the deployment package
-
   image_uri = "${aws_ecr_repository.chux_lambda_parser.repository_url}:latest"
 
   package_type = "Image"
