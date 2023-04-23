@@ -3,6 +3,7 @@ terraform {
     bucket = "chux-terraform-state"
     key    = "chux-lambda-terraform.tfstate"
     region = "us-east-1"
+
     # if needed ..
     # access_key = "your_aws_access_key"
     # secret_key = "your_aws_secret_key"
@@ -11,6 +12,7 @@ terraform {
 
 
 provider "aws" {
+  version = ">= 3.0.0"
   region = "us-east-1" # Change this to your desired AWS region
 }
 
@@ -73,7 +75,7 @@ resource "aws_lambda_function" "chux_lambda_parse" {
 
   image_uri = "${aws_ecr_repository.chux_lambda_parser.repository_url}:latest"
 
-  package_type = "Container"
+  package_type = "Image"
 
   vpc_config {
     subnet_ids         = ["subnet-009f7d01c00791a01"]
