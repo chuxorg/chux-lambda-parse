@@ -3,10 +3,6 @@ terraform {
     bucket = "chux-terraform-state"
     key    = "chux-lambda-terraform.tfstate"
     region = "us-east-1"
-
-    # if needed ..
-    # access_key = "your_aws_access_key"
-    # secret_key = "your_aws_secret_key"
   }
   required_providers {
     aws = {
@@ -16,46 +12,54 @@ terraform {
   }
 }
 
-
 provider "aws" {
-  version = ">= 3.0.0"
   region = "us-east-1" # Change this to your desired AWS region
 }
 
 locals {
-  function_name = "chux-lambda-parse"
+  function_name = "chux-ecs-parse"
 }
 
-resource "aws_iam_role" "lambda_role" {
-  name = "${local.function_name}_execution_role"
+resource "aws_ecs_cluster" "chux_cluster" {
+  name = "chux-cluster"
+}
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      }
+resource "aws_ecs_task_definition" "chux_task_definition" {
+  family                = "chux-task-family"
+  network_mode          = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                   = "256"
+  memory                = "512"
+  execution_role_arn    = aws_iam_role.ecs_execution_role.arn
+  container_definitions = jsonencode([{
+    name  = "chux-container"
+    image = "${aws_ecr_repository.chux_lambda_parser.repository_url}:latest"
+    essential = true
+    environment = [
+      { name = "AWS_BUCKET", value = "chux-crawler" },
+      { name = "AWS_SOURCE_BUCKET", value = "chux-crawler" },
+      { name = "LOG_FILE_NAME", value = "chux-cprs" },
+      { name = "MONGO_URI", value = "mongodb+srv://%s:%s@chux-mongo-cluster.4mvs7.mongodb.net/" },
+      { name = "MONGO_USER_NAME", value = "username" },
+      { name = "MONGO_PASSWORD", value = "password" },
+      { name = "MONGO_DATABASE", value = "chux-cprs" },
+      { name = "ENVIRONMENT", value = "development" },
+      { name = "TARGET", value = "Fargate" },
     ]
-  })
+  }])
 }
 
-resource "aws_iam_role_policy_attachment" "s3_secretsmanager_cloudwatch" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-  role       = aws_iam_role.lambda_role.id
-}
+resource "aws_ecs_service" "chux_service" {
+  name            = local.function_name
+  cluster         = aws_ecs_cluster.chux_cluster.id
+  task_definition = aws_ecs_task_definition.chux_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
 
-resource "aws_iam_role_policy_attachment" "secretsmanager_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
-  role       = aws_iam_role.lambda_role.id
-}
-
-resource "aws_iam_role_policy_attachment" "cloudwatch_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
-  role       = aws_iam_role.lambda_role.id
+  network_configuration {
+    subnets         = ["subnet-009f7d01c00791a01"]
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
 }
 
 resource "aws_security_group" "lambda_sg" {
@@ -71,48 +75,44 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-resource "aws_lambda_function" "chux_lambda_parse" {
-  function_name = local.function_name
-  # handler       = "parseHandler" # handler in the Go package
-  # runtime       = "go1.x"
-  role          = aws_iam_role.lambda_role.arn
+resource "aws_iam_role" "ecs_execution_role" {
+  name = "${local.function_name}_execution_role"
 
-  image_uri = var.image_uri
-
-  package_type = "Image"
-
-  vpc_config {
-    subnet_ids         = ["subnet-009f7d01c00791a01"]
-    security_group_ids = [aws_security_group.lambda_sg.id]
-  }
-
-  environment {
-    variables = {
-      AWS_BUCKET="chux-crawler"
-      AWS_SOURCE_BUCKET="chux-crawler"
-      LOG_FILE_NAME="chux-cprs"
-      MONGO_URI="mongodb+srv://%s:%s@chux-mongo-cluster.4mvs7.mongodb.net/"
-      MONGO_USER_NAME="username"
-      MONGO_PASSWORD="password"
-      MONGO_DATABASE="chux-cprs"
-      ENVIRONMENT="development"
-      TARGET="Lambda"
-      AWS_SOURCE_BUCKET="chux-crawler"
-    }
-  }
-
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
-resource "aws_iam_role_policy_attachment" "vpc_access_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-  role       = aws_iam_role.lambda_role.id
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.ecs_execution_role.id
 }
 
-resource "aws_iam_role_policy_attachment" "eni_management_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaENIManagementAccess"
-  role       = aws_iam_role.lambda_role.id
+resource "aws_iam_role_policy_attachment" "s3_secretsmanager_cloudwatch" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = aws_iam_role.ecs_execution_role.id
+}
+
+resource "aws_iam_role_policy_attachment" "secretsmanager_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+  role       = aws_iam_role.ecs_execution_role.id
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  role       = aws_iam_role.ecs_execution_role.id
 }
 
 resource "aws_ecr_repository" "chux_lambda_parser" {
   name = "chux-lambda-parser"
 }
+

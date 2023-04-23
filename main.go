@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
+	"net/http"
+	"os"
 
-	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/chuxorg/chux-parser/parsing"
 	"github.com/chuxorg/chux-parser/s3"
 )
@@ -12,12 +14,11 @@ import (
 type ParseLambda struct{}
 
 func (l *ParseLambda) Parse(ctx context.Context, input string) (string, error) {
-	
 	log.Println("Entering Parse Lambda")
 
 	bucket := s3.New()
 
-	log.Println("Downloading Files.")	
+	log.Println("Downloading Files.")
 	files, err := bucket.Download()
 	if err != nil {
 		return "", err
@@ -27,7 +28,6 @@ func (l *ParseLambda) Parse(ctx context.Context, input string) (string, error) {
 	log.Println("Parsing Files.")
 	parser := parsing.New()
 	for _, f := range files {
-		
 		parser.Parse(f)
 	}
 	log.Println("Files Parsed.")
@@ -40,28 +40,46 @@ func (l *ParseLambda) Parse(ctx context.Context, input string) (string, error) {
 	file := s3.File{}
 	file.Save(filesInterface)
 	log.Println("Files Saved")
-	
-	return "", nil
 
+	return "", nil
 }
 
 type ParseEvent struct {
 	Input string `json:"input"`
 }
 
-func parseHandler(ctx context.Context, event ParseEvent) (string, error) {
+func parseHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Setting up Parse Lambda")
 	pl := ParseLambda{}
-	s, err := pl.Parse(ctx, event.Input)
+
+	var event ParseEvent
+	err := json.NewDecoder(r.Body).Decode(&event)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	s, err := pl.Parse(r.Context(), event.Input)
 	if err != nil {
 		log.Printf("Error in parseHandler: %v", err)
-		return "", err
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	return s, nil
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"result": s})
 }
 
 func main() {
-	
-	log.Println("Starting parse lambda")
-	lambda.Start(parseHandler)
+	log.Println("Starting parse application")
+
+	http.HandleFunc("/parse", parseHandler)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("Listening on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
