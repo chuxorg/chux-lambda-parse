@@ -106,3 +106,7 @@ resource "aws_iam_role_policy_attachment" "eni_management_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaENIManagementAccess"
   role       = aws_iam_role.lambda_role.id
 }
+
+resource "aws_ecr_repository" "chux_lambda_parser" {
+  name = "chux-lambda-parser"
+}
