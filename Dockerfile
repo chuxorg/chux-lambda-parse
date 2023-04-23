@@ -20,7 +20,8 @@
 # # Set the CMD to your handler
 # CMD [ "parseHandler" ]
 # Use the official AWS Lambda Go image as the base image
-FROM public.ecr.aws/lambda/go:1.x
+# Use the official AWS Lambda Go image as the base image
+FROM public.ecr.aws/lambda/go:latest
 
 # Set the working directory to /var/task
 WORKDIR /var/task
