@@ -50,17 +50,27 @@ resource "aws_ecs_task_definition" "chux_task_definition" {
 }
 
 resource "aws_ecs_service" "chux_service" {
-  name            = local.function_name
+  name            = local.service_name
   cluster         = aws_ecs_cluster.chux_cluster.id
-  task_definition = aws_ecs_task_definition.chux_task_definition.arn
+  task_definition = aws_ecs_task_definition.chux_task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = ["subnet-009f7d01c00791a01"]
-    security_group_ids = [aws_security_group.lambda_sg.id]
+    subnets          = ["subnet-009f7d01c00791a01"]
+    security_groups  = [aws_security_group.lambda_sg.id]
+    assign_public_ip = true
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.chux_tg.arn
+    container_name   = local.container_name
+    container_port   = 80
+  }
+
+  depends_on = [aws_lb_listener.chux_listener]
 }
+
 
 resource "aws_security_group" "lambda_sg" {
   name        = "${local.function_name}_sg"
