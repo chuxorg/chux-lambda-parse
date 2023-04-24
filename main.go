@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/chuxorg/chux-parser/parsing"
 	"github.com/chuxorg/chux-parser/s3"
@@ -14,34 +13,7 @@ import (
 type ParseLambda struct{}
 
 func (l *ParseLambda) Parse(ctx context.Context, input string) (string, error) {
-	log.Println("Entering Parse Lambda")
 
-	bucket := s3.New()
-
-	log.Println("Downloading Files.")
-	files, err := bucket.Download()
-	if err != nil {
-		return "", err
-	}
-	log.Println("Files downloaded.")
-
-	log.Println("Parsing Files.")
-	parser := parsing.New()
-	for _, f := range files {
-		parser.Parse(f)
-	}
-	log.Println("Files Parsed.")
-
-	log.Println("Saving Files to Mongo.")
-	filesInterface := make([]interface{}, len(files))
-	for i, file := range files {
-		filesInterface[i] = file
-	}
-	file := s3.File{}
-	file.Save(filesInterface)
-	log.Println("Files Saved")
-
-	return "", nil
 }
 
 type ParseEvent struct {
@@ -73,13 +45,29 @@ func parseHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	log.Println("Starting parse application")
 
-	http.HandleFunc("/parse", parseHandler)
+	bucket := s3.New()
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	log.Println("Downloading Files.")
+	files, err := bucket.Download()
+	if err != nil {
+		log.Printf("Error downloading files: %v", err)
 	}
+	log.Println("Files downloaded.")
 
-	log.Printf("Listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Println("Parsing Files.")
+	parser := parsing.New()
+	for _, f := range files {
+		parser.Parse(f)
+	}
+	log.Println("Files Parsed.")
+
+	log.Println("Saving Files to Mongo.")
+	filesInterface := make([]interface{}, len(files))
+	for i, file := range files {
+		filesInterface[i] = file
+	}
+	file := s3.File{}
+	file.Save(filesInterface)
+	log.Println("Files Saved")
+
 }
