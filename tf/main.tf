@@ -103,9 +103,10 @@ resource "aws_ecs_service" "chux_service" {
   task_definition = aws_ecs_task_definition.chux_task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  vpc_id      = "vpc-0d29c91c33cb0acd7"
 
  network_configuration {
-    subnets          = ["subnet-0555ae6b617d99d25"]
+    subnets          = ["subnet-0555ae6b617d99d25", "subnet-06a7d795617f1dc72"]
     security_groups  = [aws_security_group.ecs_service_sg.id]
   }
 
