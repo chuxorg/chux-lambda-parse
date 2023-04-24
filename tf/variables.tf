@@ -21,5 +21,6 @@ variable "image_uri" {
 variable "vpc_id" {
   type        = string
   description = "The ID of the VPC where the ECS Fargate cluster and other resources will be deployed"
+  default     = "vpc-0d29c91c33cb0acd7"
 }
 
