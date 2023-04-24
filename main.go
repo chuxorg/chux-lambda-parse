@@ -69,5 +69,5 @@ func main() {
 	file := s3.File{}
 	file.Save(filesInterface)
 	log.Println("Files Saved")
-
+	return
 }
