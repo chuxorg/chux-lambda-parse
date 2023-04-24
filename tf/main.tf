@@ -148,9 +148,9 @@ resource "aws_security_group_rule" "allow_http" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 
-resource "aws_route53_record" "chux_alb_record" {
+resource "aws_route53_record" "parse_chux_alb_record" {
   zone_id = "Z0984989O0LNST2M7R4F"
-  name    = "chuxtone.com"
+  name    = "parse.chuxtone.com"
   type    = "A"
 
   alias {
@@ -159,6 +159,7 @@ resource "aws_route53_record" "chux_alb_record" {
     evaluate_target_health = false
   }
 }
+
 
 resource "aws_lb" "chux_alb" {
   name               = "chux-alb"
