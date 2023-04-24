@@ -175,3 +175,19 @@ resource "aws_lb_target_group" "chux_tg" {
   }
 }
 
+resource "aws_security_group" "ecs_service" {
+  name        = "chux-ecs-service-sg"
+  description = "Security group for the ECS service"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "chux-ecs-service-sg"
+  }
+}
