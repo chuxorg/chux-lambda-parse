@@ -104,10 +104,9 @@ resource "aws_ecs_service" "chux_service" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
-  network_configuration {
+ network_configuration {
     subnets          = ["subnet-0555ae6b617d99d25"]
-    security_groups  = [aws_security_group.ecs_service.id]
-    
+    security_groups  = [aws_security_group.ecs_service_sg.id]
   }
 
   load_balancer {
@@ -183,19 +182,3 @@ resource "aws_lb_target_group" "chux_tg" {
 
 }
 
-resource "aws_security_group" "ecs_service" {
-  name        = "chux-ecs-service-sg"
-  description = "Security group for the ECS service"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "chux-ecs-service-sg"
-  }
-}
