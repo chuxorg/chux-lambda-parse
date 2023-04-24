@@ -100,6 +100,13 @@ resource "aws_ecs_task_definition" "chux_task" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
+  depends_on = [
+    aws_iam_role_policy_attachment.task_role_policy,
+    aws_iam_role_policy_attachment.execution_role_policy,
+    aws_lb_listener.chux_listener,
+  ]
+
+
 }
 
 resource "aws_ecs_service" "chux_service" {
@@ -189,3 +196,15 @@ resource "aws_lb_target_group" "chux_tg" {
 
 }
 
+resource "aws_lb_listener" "chux_listener" {
+  load_balancer_arn = aws_lb.chux_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.chux_tg.arn
+  }
+}
+
+ 
