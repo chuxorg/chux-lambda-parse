@@ -71,23 +71,23 @@ jobs:
         TAG_NAME=${GITHUB_REF##*/}
         echo "image_uri = \"${{ steps.login-ecr.outputs.registry }}/chux-lambda-parser:${TAG_NAME}\"" > tf/variables.auto.tfvars
 
-   # Terraform Plan
-- name: Terraform Plan
-  run: terraform plan -var="aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="aws_region=${{ secrets.AWS_REGION }}" -var="vpc_id=${{ secrets.VPC_ID }}"
-  working-directory: tf/
-  env:
-    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    AWS_REGION: us-east-1
-    AWS_SDK_LOAD_CONFIG: 1
+    # Terraform Plan
+    - name: Terraform Plan
+      run: terraform plan -var="aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="aws_region=${{ secrets.AWS_REGION }}" -var="vpc_id=${{ secrets.VPC_ID }}"
+      working-directory: tf/
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-east-1
+        AWS_SDK_LOAD_CONFIG: 1
 
-# Terraform Apply
-- name: Terraform Apply
-  run: terraform apply -auto-approve -var="aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="aws_region=${{ secrets.AWS_REGION }}" -var="vpc_id=${{ secrets.VPC_ID }}"
-  working-directory: tf/
-  env:
-    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    AWS_REGION: us-east-1
-    AWS_SDK_LOAD_CONFIG: 1
+    # Terraform Apply
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var="aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="aws_region=${{ secrets.AWS_REGION }}" -var="vpc_id=${{ secrets.VPC_ID }}"
+      working-directory: tf/
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-east-1
+        AWS_SDK_LOAD_CONFIG: 1
 
