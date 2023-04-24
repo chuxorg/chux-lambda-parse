@@ -152,7 +152,7 @@ resource "aws_lb" "chux_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = ["subnet-0555ae6b617d99d25"]
+  subnets            = ["subnet-0555ae6b617d99d25", "subnet-06a7d795617f1dc72"]
 
   tags = {
     Name = "chux-alb"
@@ -163,16 +163,24 @@ resource "aws_lb_target_group" "chux_tg" {
   name     = "chux-tg"
   port     = 80
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = var.vpc_id
 
   health_check {
     enabled             = true
     interval            = 30
     path                = "/"
+    port                = "traffic-port"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
     timeout             = 5
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
+    protocol            = "HTTP"
+    matcher             = "200"
   }
+   tags = {
+    Name = "chux-target-group"
+  }
+
 }
 
 resource "aws_security_group" "ecs_service" {
