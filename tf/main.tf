@@ -84,10 +84,15 @@ resource "aws_ecs_cluster" "chux_cluster" {
 
 resource "aws_ecs_task_definition" "chux_task" {
   family                   = "chux-task-family"
-  container_definitions    = jsonencode([{
-    name  = "chux-container"
-    image = var.image_uri
+  container_definitions = jsonencode([{
+    name      = "chux-container"
+    image     = var.image_uri
     essential = true
+    portMappings = [{
+      containerPort = 80
+      hostPort      = 80
+      protocol      = "tcp"
+    }]
   }])
   task_role_arn            = aws_iam_role.task_role.arn
   execution_role_arn       = aws_iam_role.execution_role.arn
