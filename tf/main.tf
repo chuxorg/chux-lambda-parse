@@ -106,7 +106,7 @@ resource "aws_ecs_service" "chux_service" {
 
   network_configuration {
     subnets          = ["subnet-0555ae6b617d99d25"]
-    security_groups  = [aws_security_group.ecs_service]
+    security_groups  = [aws_security_group.ecs_service.id]
     
   }
 
@@ -144,6 +144,34 @@ resource "aws_route53_record" "chux_alb_record" {
     name                   = aws_lb.chux_alb.dns_name
     zone_id                = aws_lb.chux_alb.zone_id
     evaluate_target_health = false
+  }
+}
+
+resource "aws_lb" "chux_alb" {
+  name               = "chux-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb_sg.id]
+  subnets            = ["subnet-0555ae6b617d99d25"]
+
+  tags = {
+    Name = "chux-alb"
+  }
+}
+
+resource "aws_lb_target_group" "chux_tg" {
+  name     = "chux-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
+  health_check {
+    enabled             = true
+    interval            = 30
+    path                = "/"
+    timeout             = 5
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
   }
 }
 
