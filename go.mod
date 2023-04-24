@@ -2,16 +2,12 @@ module github.com/chuxorg/lambda-parse
 
 go 1.19
 
-require (
-	github.com/aws/aws-lambda-go v1.40.0
-	github.com/chuxorg/chux-models v1.2.39
-	github.com/chuxorg/chux-parser v1.0.12
-	github.com/spf13/viper v1.15.0
-)
+require github.com/chuxorg/chux-parser v1.0.14
 
 require (
 	github.com/aws/aws-sdk-go v1.44.248 // indirect
 	github.com/chuxorg/chux-datastore v1.2.5 // indirect
+	github.com/chuxorg/chux-models v1.2.39 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -26,6 +22,7 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/viper v1.15.0 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.1 // indirect

@@ -38,8 +38,6 @@ cloud.google.com/go/storage v1.14.0/go.mod h1:GrKmX003DSIwi9o29oFT7YDnHYwZoctc3f
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/aws/aws-lambda-go v1.40.0 h1:6dKcDpXsTpapfCFF6Debng6CiV/Z3sNHekM6bwhI2J0=
-github.com/aws/aws-lambda-go v1.40.0/go.mod h1:jwFe2KmMsHmffA1X2R09hH6lFzJQxzI8qK17ewzbQMM=
 github.com/aws/aws-sdk-go v1.44.248 h1:GvkxpgsxqNc03LmhXiaxKpzbyxndnex7V+OThLx4g5M=
 github.com/aws/aws-sdk-go v1.44.248/go.mod h1:aVsgQcEevwlmQ7qHE9I3h+dtQgpqhFB+i8Phjh7fkwI=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
@@ -49,6 +47,8 @@ github.com/chuxorg/chux-models v1.2.39 h1:Y5sk7v/7o5IxPvgr+sACXNTEmKwK7PaRFzY81J
 github.com/chuxorg/chux-models v1.2.39/go.mod h1:KhFX1fHdcaxob+87CJSjmukY430e+h3H8V6YJJdpJts=
 github.com/chuxorg/chux-parser v1.0.12 h1:oDPGeC/dLtvDK/rWMiXBS4UMLLIMFY3P47wCP4WPIqg=
 github.com/chuxorg/chux-parser v1.0.12/go.mod h1:+rsU4vhVCHbc3GG7EM8gMgnXWAusteTz/j+o7n1Oc10=
+github.com/chuxorg/chux-parser v1.0.14 h1:+Jp8Is8/0PaPtKnZjR1r4zroS8umBb0KPoK//XBITQs=
+github.com/chuxorg/chux-parser v1.0.14/go.mod h1:8/4qKhMaXDn30ozBTZJDt5IWEsZUBHNjDfysMjXhWnU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
