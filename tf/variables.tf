@@ -18,9 +18,9 @@ variable "image_uri" {
   description = "The ECR image URI for the Lambda function"
 }
 
-variable "vpc_id" {
-  type        = string
-  description = "The ID of the VPC where the ECS Fargate cluster and other resources will be deployed"
-  default     = "vpc-0d29c91c33cb0acd7"
-}
+# variable "vpc_id" {
+#   type        = string
+#   description = "The ID of the VPC where the ECS Fargate cluster and other resources will be deployed"
+#   default     = "vpc-0d29c91c33cb0acd7"
+# }
 

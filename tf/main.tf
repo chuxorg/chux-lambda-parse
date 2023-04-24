@@ -71,8 +71,8 @@ resource "aws_security_group" "ecs_service_sg" {
   vpc_id      = "vpc-0d29c91c33cb0acd7"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = -1
+    to_port     = -1
     protocol    = "tcp"
     cidr_blocks = ["10.0.0.0/16"]
   }
@@ -103,7 +103,8 @@ resource "aws_ecs_service" "chux_service" {
   task_definition = aws_ecs_task_definition.chux_task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
-  vpc_id      = "vpc-0d29c91c33cb0acd7"
+  #vpc_id      = "vpc-0d29c91c33cb0acd7"
+
 
  network_configuration {
     subnets          = ["subnet-0555ae6b617d99d25", "subnet-06a7d795617f1dc72"]
@@ -164,7 +165,7 @@ resource "aws_lb_target_group" "chux_tg" {
   port     = 80
   protocol = "HTTP"
   target_type = "ip"
-  vpc_id   = var.vpc_id
+  vpc_id = "vpc-0d29c91c33cb0acd7"
 
   health_check {
     enabled             = true
